@@ -7,5 +7,11 @@ page = session.post('http://www.indianspices.com/dailyprice/ListAutionDetails.ph
 
 #Home Page details
 
-page = BS(page.text,"html.parser").find('div',{'class':'pagination'})
-print(page)
+homepage = BS(page.text,"html.parser").find('div',{'class':'pagination'})
+# print(homepage)
+
+# Finding total number of pages
+
+pages = homepage.find_all('a', href = re.compile(r'.*\?page.*'))
+numPages = len(pages)-1
+print(numPages)
