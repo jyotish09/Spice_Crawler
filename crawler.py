@@ -1,4 +1,4 @@
-import requests, urllib, re
+import requests, urllib, re, os
 from bs4 import BeautifulSoup as BS
 
 session = requests.session()
@@ -33,12 +33,14 @@ for i in pdfLinksInCurrentPage:
         downloadPDFLinks.append(auctionReportURL+(i.find("a")['href']).replace(" ", "%20"))
         fileName.append((i.find("a")['href'][20:]).replace(" ", "_"))
 
-destination = '../DownloadedPDFs'
+destination = 'DownloadedPDFs'
+if not os.path.exists(destination):
+    os.makedirs(destination)
 k = 0
 for item in downloadPDFLinks:
      r = requests.get(item)
      filename = fileName[k]
      print(filename)
-     with open(filename,'wb') as f:
+     with open(destination+"/"+filename,'wb') as f:
          f.write(r.content)
      k+=1
