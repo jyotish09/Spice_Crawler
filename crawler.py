@@ -20,8 +20,12 @@ numPages = len(pages)-1
 print("\n Checking Tables in current page , for now page = 1 \n ")
 linksInCurrentPage = BS(page.text,"html.parser").find_all('td',{'width':'58%'})
 
+auctionerNames = []
+
 for i in linksInCurrentPage:
-    print(i.get_text().strip())
+    if(i.get_text().strip() != "Auctioner Name"):
+        auctionerNames.append(i.get_text().strip())
+print(auctionerNames)
 
 # Checking PDF links in the table
 print("\n Checking PDF links in the table \n ")
@@ -36,7 +40,28 @@ for i in pdfLinksInCurrentPage:
 destination = 'DownloadedPDFs'
 if not os.path.exists(destination):
     os.makedirs(destination)
+
+# Writing The auctioner name along with their filename for easy reference
+
 k = 0
+text  = ''
+
+for i in fileName:
+    text += "\n "+auctionerNames[k]+" - "+fileName[k]
+    k+=1
+
+pdfLinking = os.path.join(destination, "PDF_Names.txt")
+
+linkingFiles = open(pdfLinking, "w")
+
+toFile = text
+
+linkingFiles.write(toFile)
+
+linkingFiles.close()
+
+k = 0
+
 for item in downloadPDFLinks:
      r = requests.get(item)
      filename = fileName[k]
